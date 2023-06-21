@@ -2,7 +2,6 @@ import { Response, Request, NextFunction } from 'express';
 import { getConnection } from 'typeorm';
 
 import Todo from '../entities/Todo';
-import { HttpError } from '../helpers/errors';
 
 export const isExist = async (req: Request, res: Response, next: NextFunction) => {
   const { todoId } = req.params;
@@ -12,6 +11,6 @@ export const isExist = async (req: Request, res: Response, next: NextFunction) =
   if (todo) {
     next();
   } else {
-    throw new HttpError('Not found', 404);
+    res.status(400).json('Not found');
   }
 };

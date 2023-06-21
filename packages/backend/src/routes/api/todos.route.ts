@@ -15,12 +15,12 @@ todosRouter.post(
   tryCatch(todoController.addOneTodo.bind(todoController))
 );
 
-todosRouter.use(isExist);
-todosRouter.get('/:todoId', tryCatch(todoController.getOneTodo.bind(todoController)));
-todosRouter.delete('/:todoId', tryCatch(todoController.deleteTodoId.bind(todoController)));
+todosRouter.get('/:todoId', isExist, tryCatch(todoController.getOneTodo.bind(todoController)));
+todosRouter.delete('/:todoId', isExist, tryCatch(todoController.deleteTodoId.bind(todoController)));
 todosRouter.put(
   '/:todoId',
   isValidate.updateTodoValidation,
+  isExist,
   tryCatch(todoController.updateTodoId.bind(todoController))
 );
 
