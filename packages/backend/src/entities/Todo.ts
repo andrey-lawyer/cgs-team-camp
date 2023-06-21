@@ -1,7 +1,8 @@
-import { PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, BaseEntity, Entity } from 'typeorm';
 
 // eslint-disable-next-line import/no-cycle
-import User from './User';
+
+import { Test } from '../types/todos.type';
 
 @Entity()
 export default class Todo extends BaseEntity {
@@ -18,8 +19,5 @@ export default class Todo extends BaseEntity {
   complete: boolean;
 
   @Column()
-  access: 'public' | 'private';
-
-  @ManyToOne(() => User, (user) => user.todos)
-  user: User;
+  access: Test;
 }

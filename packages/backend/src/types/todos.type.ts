@@ -1,4 +1,4 @@
-// TODO: Put a real interfaces here
+export type Test = 'public' | 'private';
 
 export interface ITodo {
   id?: string;
@@ -7,5 +7,5 @@ export interface ITodo {
 
   complete: boolean;
 
-  access: 'public' | 'private';
+  access: Test;
 }
