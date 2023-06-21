@@ -2,7 +2,7 @@ import { PrimaryGeneratedColumn, Column, BaseEntity, Entity } from 'typeorm';
 
 // eslint-disable-next-line import/no-cycle
 
-import { Test } from '../types/todos.type';
+import { IsAccess } from '../types/todos.type';
 
 @Entity()
 export default class Todo extends BaseEntity {
@@ -19,5 +19,5 @@ export default class Todo extends BaseEntity {
   complete: boolean;
 
   @Column()
-  access: Test;
+  access: IsAccess;
 }

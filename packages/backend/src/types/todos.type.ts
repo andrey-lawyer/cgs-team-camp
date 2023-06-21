@@ -1,4 +1,4 @@
-export type Test = 'public' | 'private';
+export type IsAccess = 'public' | 'private';
 
 export interface ITodo {
   id?: string;
@@ -7,5 +7,5 @@ export interface ITodo {
 
   complete: boolean;
 
-  access: Test;
+  access: IsAccess;
 }
