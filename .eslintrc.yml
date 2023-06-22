@@ -41,6 +41,7 @@ settings:
 # ⭐ Rules
 rules:
   # ⭐ Imports & Files extensions
+  # prettier/prettier: ['error', { 'endOfLine': 'auto' }]
   import/no-import-module-exports: 'off'
   # Avoid .ts and .tsx import extensions
   import/extensions: 'off'

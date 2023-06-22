@@ -1,5 +1,11 @@
-// TODO: Put a real interfaces here
+export type IsAccess = 'public' | 'private';
 
 export interface ITodo {
-  data: string;
+  id?: string;
+  title: string;
+  description: string;
+
+  complete: boolean;
+
+  access: IsAccess;
 }

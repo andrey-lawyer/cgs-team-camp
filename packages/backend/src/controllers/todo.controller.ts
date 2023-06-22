@@ -5,9 +5,33 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   async getAllTodo(_: Request, res: Response) {
-    // TODO: Write your implementation here
-    const todos = await this.todoService.findAll();
-    res.send(todos);
+    const data = await this.todoService.findAllTodos();
+    res.status(200).json({ data, status: 'success' });
+  }
+
+  async getOneTodo(req: Request, res: Response) {
+    const id = req.params.todoId;
+    const data = await this.todoService.getOneTodo(id);
+    res.status(200).json(data);
+  }
+
+  async addOneTodo(req: Request, res: Response) {
+    const newTodo = req.body;
+    const data = await this.todoService.addTodo(newTodo);
+    res.status(201).json({ data, status: 'success' });
+  }
+
+  async deleteTodoId(req: Request, res: Response) {
+    const id = req.params.todoId;
+    await this.todoService.removeTodo(id);
+    return res.status(200).json({ massage: `todo with id ${id} was removed` });
+  }
+
+  async updateTodoId(req: Request, res: Response) {
+    const id = req.params.todoId;
+    const todo = req.body;
+    await this.todoService.updateTodo(todo, id);
+    res.status(200).json({ massage: `todo with id ${id} was updated` });
   }
 }
 
