@@ -21,3 +21,22 @@ iframe {
   left: 125px;
   overflow: visible;
 }
+ol,
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th,
+td {
+  border: #ccc 1px solid;
+  padding: 5px 10px;
+}
