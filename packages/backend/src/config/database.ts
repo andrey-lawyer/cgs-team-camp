@@ -2,6 +2,7 @@
 import { createConnection, DataSourceOptions } from 'typeorm';
 
 import Todo from '../entities/Todo';
+import User from '../entities/User';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getSSLConfig(env: string) {
@@ -27,7 +28,7 @@ const connectDB = async () => {
       logging: ['query', 'error'],
       type: 'postgres',
       // entities: ['dist/**/*.entity.{ts,js}'],
-      entities: [Todo],
+      entities: [User, Todo],
       migrations: ['dist/migrations/**/*.{ts,js}'],
       subscribers: ['src/subscriber/**/*.ts'],
       database: process.env.POSTGRES_DB,

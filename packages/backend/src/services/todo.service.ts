@@ -1,14 +1,18 @@
 import { getConnection } from 'typeorm';
+import { Request } from 'express';
 import Todo from '../entities/Todo';
 // import { EntityManager } from 'typeorm';
 
 import { ITodo } from '../types/todos.type';
 
 export default class TodoService {
-  async findAllTodos() {
+  async findAllTodos(req: Request) {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
-    const data = await todoRepository.find();
+
+    const data = req.user
+      ? await todoRepository.find()
+      : await todoRepository.find({ where: { access: 'public' } });
     return data;
   }
 
@@ -16,7 +20,6 @@ export default class TodoService {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
     const oneTodo = await todoRepository.findOne({ where: { id: todoId } });
-
     return oneTodo;
   }
 

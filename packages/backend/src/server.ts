@@ -1,9 +1,12 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import session from 'express-session';
 import 'dotenv/config';
 
 import AppRouter from './routes';
 import connectDB from './config/database';
+// eslint-disable-next-line import/no-extraneous-dependencies
 
 const app = express();
 const router = new AppRouter(app);
@@ -14,6 +17,13 @@ connectDB();
 app.set('port', process.env.PORT || 4200);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: 'secret',
+    saveUninitialized: false,
+    resave: false
+  })
+);
 
 router.init();
 
