@@ -23,6 +23,31 @@ export default class IsValidate {
     await this.validateRequest(schema, req, res, next);
   };
 
+  userValidationEmail = async (req: Request, res: Response, next: NextFunction) => {
+    const schema = Joi.object({
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net'] }
+        })
+        .pattern(
+          // eslint-disable-next-line no-useless-escape
+          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+        )
+    });
+    await this.validateRequest(schema, req, res, next);
+  };
+
+  userValidationPassword = async (req: Request, res: Response, next: NextFunction) => {
+    const schema = Joi.object({
+      password: Joi.string()
+        // eslint-disable-next-line no-useless-escape
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
+        .required()
+    });
+    await this.validateRequest(schema, req, res, next);
+  };
+
   validateRequest = async (schema: any, req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.validateAsync(req.body);

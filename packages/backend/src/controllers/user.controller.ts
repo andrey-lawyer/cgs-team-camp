@@ -1,20 +1,13 @@
 import { Response, Request } from 'express';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcrypt';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { nanoid } from 'nanoid';
-import { getConnection } from 'typeorm';
-import { transporter } from '../config/nodemailer';
-import User from '../entities/User';
 
 import UserService from '../services/user.service';
 
 export class UserController {
   constructor(private userService: UserService) {}
-
-  BASE_URL_FRONT = 'http://localhost:3000/';
 
   async registerUser(req: Request, res: Response) {
     res.json({
@@ -31,46 +24,20 @@ export class UserController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async forgetPasswordUser(req: Request, _: Response) {
+  async forgetPasswordUser(req: Request, res: Response) {
     const { email } = req.body;
-    const newConnection = await getConnection();
-    const userRepository = newConnection.getRepository(User);
-    const user = await userRepository.findOne({ where: { email } });
-    if (!user) {
-      throw new Error('User not found');
-    }
-    // eslint-disable-next-line prettier/prettier
-    const verification = nanoid();
-
-    const emailOptions = {
-      from: 'realvostok@meta.ua',
-      to: user.email,
-      subject: 'password recovery',
-      html: `<a target="_blank" href="${this.BASE_URL_FRONT}/password-recovery/${verification}">Click link</a>`
-    };
-    await transporter.sendMail(emailOptions);
-    await userRepository.update({ email: user.email }, { ...user, verification });
+    const emailUser = await this.userService.sendEmail(email);
+    res.json({
+      message: `mail sent successfully to ${emailUser}`
+    });
   }
 
   recoveryPassword = async (req: Request, res: Response) => {
     const { verificationToken } = req.params;
-    const newConnection = await getConnection();
-    const userRepository = newConnection.getRepository(User);
-    const user = await userRepository.findOne({ where: { verification: verificationToken } });
-    if (!user) {
-      throw new Error('User not found');
-    }
     const { password } = req.body;
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const token = await this.userService.newPassword(verificationToken, password);
 
-    await userRepository.update(
-      { verification: verificationToken },
-      { ...user, password: hashedPassword }
-    );
-    const updateUser = { email: user.email, id: user.id };
-    const token = jwt.sign({ updateUser }, process.env.JWT_SECRET);
-    return res.json({ token });
+    return res.json({ message: 'password updated successfully', token });
   };
 
   logoutUser(req: Request, res: Response) {
@@ -81,10 +48,8 @@ export class UserController {
       req.session.destroy(() => {
         res.redirect('/');
       });
-      // res.redirect('/');
     });
   }
 }
-// const userController = new UserController();
 const userController = new UserController(new UserService());
 export default userController;

@@ -1,10 +1,11 @@
 import { Response, Request } from 'express';
 import TodoService from '../services/todo.service';
+import { IGetUserAuthInfoRequest } from '../types/user.types';
 
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  async getAllTodo(req: Request, res: Response) {
+  async getAllTodo(req: IGetUserAuthInfoRequest, res: Response) {
     const data = await this.todoService.findAllTodos(req);
 
     res.status(200).json({ data, status: 'success' });
@@ -16,22 +17,26 @@ export class TodoController {
     res.status(200).json(data);
   }
 
-  async addOneTodo(req: Request, res: Response) {
+  async addOneTodo(req: IGetUserAuthInfoRequest, res: Response) {
     const newTodo = req.body;
-    const data = await this.todoService.addTodo(newTodo);
-    res.status(201).json({ data, status: 'success' });
+    const { user } = req;
+    if (user) {
+      const data = await this.todoService.addTodo(newTodo, user);
+      res.status(201).json({ data, status: 'success' });
+    }
   }
 
-  async deleteTodoId(req: Request, res: Response) {
+  async deleteTodoId(req: IGetUserAuthInfoRequest, res: Response) {
     const id = req.params.todoId;
-    await this.todoService.removeTodo(id);
+    await this.todoService.removeTodo(req, id);
     return res.status(200).json({ massage: `todo with id ${id} was removed` });
   }
 
-  async updateTodoId(req: Request, res: Response) {
+  async updateTodoId(req: IGetUserAuthInfoRequest, res: Response) {
     const id = req.params.todoId;
     const todo = req.body;
-    await this.todoService.updateTodo(todo, id);
+
+    await this.todoService.updateTodo(req, todo, id);
     res.status(200).json({ massage: `todo with id ${id} was updated` });
   }
 }

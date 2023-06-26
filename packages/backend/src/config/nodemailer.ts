@@ -6,7 +6,7 @@ const config = {
   port: 465,
   secure: true,
   auth: {
-    user: 'realvostok@meta.ua',
+    user: 'real_vostok@meta.ua',
     pass: process.env.PASSWORD
   }
 };
