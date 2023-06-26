@@ -7,11 +7,15 @@ import { schemaAdd, schemaUpdate } from '../../../services/validation';
 import TextField from '@material-ui/core/TextField';
 import { Box, Typography } from '@material-ui/core';
 import { onSubmitUpdate } from '../../../services/submit-update';
-import { useMutationAdd, useMutationUpdate } from '../../../hooks/use.query';
 import { onSubmitAdd } from '../../../services/submit-add';
+import { useMutationUpdate } from '../../../hooks/use.mutation.update';
+import { useMutationAdd } from '../../../hooks/use.mutation.add';
 
 export const ModalForm = ({ onClose, todo, type }: IModalProps) => {
-  const { mutate } = type === 'update' ? useMutationUpdate() : useMutationAdd();
+  const {
+    mutation: { mutate }
+  } = type === 'update' ? useMutationUpdate() : useMutationAdd();
+
   const nameButton = type === 'update' ? 'Update' : 'Add';
   const completed = todo?.complete ? 'done' : 'in progress';
   const schema = type === 'update' ? schemaUpdate : schemaAdd;

@@ -18,13 +18,3 @@ export const MainRouter = () => (
     </Routes>
   </Router>
 );
-
-//  <ul>
-//    {films.map(({ id, title }) => (
-//      <li key={id}>
-//        <NavItem to={`/movies/${id}`} state={{ from: location }}>
-//          <p>{title}</p>
-//        </NavItem>
-//      </li>
-//    ))}
-//  </ul>;

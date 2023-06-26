@@ -1,7 +1,4 @@
-import { useMutation } from 'react-query';
 import { IForm, IUpdateTodo } from '../common/types/formik.types';
-import { queryClient } from '../app';
-import { ApiTodos } from './htpp';
 import { ITodoCheck } from '../common/types/todo.types';
 
 const onUpdate = (todo: IUpdateTodo, mutate: Function) => {

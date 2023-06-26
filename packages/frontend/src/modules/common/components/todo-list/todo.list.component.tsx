@@ -1,13 +1,8 @@
-import React, {  useContext } from 'react';
+import React, { useContext } from 'react';
 
-import { useQuery } from 'react-query';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { ApiTodos } from '../../../services/htpp';
 import { useScreen } from '../../../hooks/use.screen';
-import { APP_KEYS } from '../../consts';
-import { iQuery } from '../../types/query.types';
-import { TodoElementMob } from '../todo-element-mob';
 import { Box, Button } from '@material-ui/core';
 import { ModalContext } from '../modal-context';
 import { ModalForm } from '../modal-form';
@@ -15,16 +10,16 @@ import { Portal } from '../portal';
 import { TodoElementTab } from '../todo-element-tab';
 import { TodoElementDesk } from '../todo-element-desc';
 import { Table, List, Item } from './todo.list.styled';
+import { useGetAllTodos } from '../../../hooks/use.query.all';
+import { TodoElementMob } from '../todo-element-mob';
 
-const apiTodos = new ApiTodos();
 export const TodoList = () => {
   const { isMobile, isTablet, isDesk } = useScreen();
   const { modal, open, close } = useContext(ModalContext);
 
-  const { isLoading, error, data }: iQuery = useQuery(
-    APP_KEYS.QUERY_KEYS.TODOS,
-    apiTodos.getAllTodos
-  );
+  const {
+    query: { isLoading, error, data }
+  } = useGetAllTodos();
 
   return (
     <>

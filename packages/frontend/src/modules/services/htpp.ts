@@ -1,28 +1,90 @@
-import axios from 'axios';
-import { ITodo } from '../common/types/todo.types';
-import { APP_KEYS } from '../common/consts';
+import axios from 'axios'; // It could be any fetching services, such as default fetch, call api, xhr, etc.
 
-axios.defaults.baseURL = ' http://localhost:5000/api/';
+const BASE_URL = ' http://localhost:5000';
 
-export class ApiTodos {
-  async getAllTodos() {
-    const { data } = await axios.get(APP_KEYS.QUERY_KEYS.TODOS);
-    return data;
+export class HttpService {
+  baseUrl: string;
+  fetchingService: any;
+  apiVersion: string;
+  constructor(baseUrl = BASE_URL, fetchingService = axios, apiVersion = 'api') {
+    this.baseUrl = baseUrl;
+    this.fetchingService = fetchingService;
+    this.apiVersion = apiVersion;
   }
-  async postAddTodo(newTodo: ITodo) {
-    const { data } = await axios.post(APP_KEYS.QUERY_KEYS.TODOS, newTodo);
-    return data;
+
+  private getFullApiUrl(url: string) {
+    return `${this.baseUrl}/${this.apiVersion}/${url}`;
   }
-  async getTodoId(idTodo: string) {
-    const { data } = await axios.get(`${APP_KEYS.QUERY_KEYS.TODOS}/${idTodo}`);
-    return data;
+
+  private populateTokenToHeaderConfig() {
+    return {
+      Authorization: localStorage.getItem('token')
+    };
   }
-  async deleteTodoId(idTodo: string) {
-    const { data } = await axios.delete(`${APP_KEYS.QUERY_KEYS.TODOS}/${idTodo}`);
-    return data;
+
+  private extractUrlAndDataFromConfig({
+    data,
+    url,
+    ...configWithoutDataAndUrl
+  }: {
+    data: any;
+    url: string;
+  }) {
+    return configWithoutDataAndUrl;
   }
-  async updateTodoId(idTodo: string, todo: ITodo) {
-    const { data } = await axios.put(`${APP_KEYS.QUERY_KEYS.TODOS}/${idTodo}`, todo);
-    return data;
+
+  get(config: any, withAuth = true) {
+    if (withAuth) {
+      config.headers = {
+        ...config.headers,
+        ...this.populateTokenToHeaderConfig()
+      };
+    }
+    return this.fetchingService.get(
+      this.getFullApiUrl(config.url),
+      this.extractUrlAndDataFromConfig(config)
+    );
+  }
+
+  post(config: any, withAuth = true) {
+    if (withAuth) {
+      config.headers = {
+        ...config.headers,
+        ...this.populateTokenToHeaderConfig()
+      };
+    }
+    console.log(config.data);
+    return this.fetchingService.post(
+      this.getFullApiUrl(config.url),
+      config.data,
+      this.extractUrlAndDataFromConfig(config)
+    );
+  }
+
+  put(config: any, withAuth = true) {
+    if (withAuth) {
+      config.headers = {
+        ...config.headers,
+        ...this.populateTokenToHeaderConfig()
+      };
+    }
+    return this.fetchingService.put(
+      this.getFullApiUrl(config.url),
+      config.data,
+      this.extractUrlAndDataFromConfig(config)
+    );
+  }
+
+  delete(config: any, withAuth = true) {
+    if (withAuth) {
+      config.headers = {
+        ...config.headers,
+        ...this.populateTokenToHeaderConfig()
+      };
+    }
+    return this.fetchingService.delete(
+      this.getFullApiUrl(config.url),
+      this.extractUrlAndDataFromConfig(config)
+    );
   }
 }

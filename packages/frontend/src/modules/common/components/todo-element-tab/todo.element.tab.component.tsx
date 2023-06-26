@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useMutationDElete } from '../../../hooks/use.query';
+import { useMutationDelete } from '../../../hooks/use.mutation.delete';
 import { ITodoProps } from '../../types/props.types';
 import { APP_KEYS } from '../../consts';
 import { Box } from '@material-ui/core';
@@ -8,7 +8,9 @@ import { ButtonDel, ButtonView } from './todo.element.tab.styled';
 export const TodoElementTab: FC<ITodoProps> = ({
   todo: { id, title, description, complete, access }
 }) => {
-  const { mutate } = useMutationDElete();
+  const {
+    mutation: { mutate }
+  } = useMutationDelete();
   const onDelete = (id: string) => {
     mutate(id);
   };

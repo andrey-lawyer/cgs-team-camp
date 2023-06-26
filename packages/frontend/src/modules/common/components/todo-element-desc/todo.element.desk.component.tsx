@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import { ITodoProps } from '../../types/props.types';
 import { APP_KEYS } from '../../consts';
-import { useMutationDElete } from '../../../hooks/use.query';
+import { useMutationDelete } from '../../../hooks/use.mutation.delete';
 import { ButtonDel, ButtonView, Cell } from './todo.element.desk.styled';
 export const TodoElementDesk: FC<ITodoProps> = ({
   todo: { id, title, description, complete, access }
 }) => {
-  const { mutate } = useMutationDElete();
+  const {
+    mutation: { mutate }
+  } = useMutationDelete();
   const onDelete = (id: string) => {
     mutate(id);
   };
