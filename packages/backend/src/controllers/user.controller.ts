@@ -13,7 +13,7 @@ import UserService from '../services/user.service';
 
 export class UserController {
   constructor(private userService: UserService) {}
-  
+
   BASE_URL_FRONT = 'http://localhost:3000/';
 
   async registerUser(req: Request, res: Response) {
