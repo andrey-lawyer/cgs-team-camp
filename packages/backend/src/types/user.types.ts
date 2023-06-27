@@ -10,5 +10,6 @@ export interface IGetUserAuthInfoRequest extends Request {
   user: {
     id: string;
     email: string;
+    logout?: Function;
   };
 }

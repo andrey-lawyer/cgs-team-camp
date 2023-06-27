@@ -5,11 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import User from '../entities/User';
 import { transporter } from '../config/nodemailer';
+import { ErrorUnauthorized } from '../helpers/errors';
 
 export default class UserService {
-  BASE_URL_FRONT = 'http://localhost:3000/';
+  BASE_URL_FRONT = process.env.FRONT;
 
-  async sendEmail(email: string) {
+  async sendEmailForgotPassword(email: string) {
     const newConnection = await getConnection();
     const userRepository = newConnection.getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
@@ -23,7 +24,7 @@ export default class UserService {
       from: 'real_vostok@meta.ua',
       to: user.email,
       subject: 'password recovery',
-      html: `<a target="_blank" href="${this.BASE_URL_FRONT}/password-recovery/${verification}">Click link</a>`
+      html: `<a target="_blank" href="${this.BASE_URL_FRONT}/new-password/${verification}">Click link</a>`
     };
     const send = await transporter.sendMail(emailOptions);
     const updateUser = await userRepository.update(
@@ -34,7 +35,37 @@ export default class UserService {
     throw new Error('update failed');
   }
 
-  newPassword = async (verificationToken: string, password: string) => {
+  async sendEmailChangePassword(email: string, password: string) {
+    const newConnection = await getConnection();
+    const userRepository = newConnection.getRepository(User);
+    const user = await userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      throw new ErrorUnauthorized('Password is wrong');
+    }
+    // eslint-disable-next-line prettier/prettier
+    const verification = uuidv4();
+
+    const emailOptions = {
+      from: 'real_vostok@meta.ua',
+      to: user.email,
+      subject: 'password recovery',
+      html: `<a target="_blank" href="${this.BASE_URL_FRONT}/new-password/${verification}">Click link</a>`
+    };
+
+    const send = await transporter.sendMail(emailOptions);
+    const updateUser = await userRepository.update(
+      { email: user.email },
+      { ...user, verification }
+    );
+    if (send && updateUser) return email;
+    throw new Error('update failed');
+  }
+
+  onNewPasswordUser = async (verificationToken: string, password: string) => {
     const newConnection = await getConnection();
     const userRepository = newConnection.getRepository(User);
     const user = await userRepository.findOne({ where: { verification: verificationToken } });
@@ -49,5 +80,18 @@ export default class UserService {
       { ...user, password: hashedPassword }
     );
     return data;
+  };
+
+  verificationUser = async (verificationToken: string) => {
+    const newConnection = await getConnection();
+    const userRepository = newConnection.getRepository(User);
+    const user = await userRepository.findOne({
+      where: { verification: verificationToken }
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   };
 }

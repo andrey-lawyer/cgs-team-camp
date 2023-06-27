@@ -35,15 +35,26 @@ router.delete(
 );
 
 router.post(
-  '/reload',
+  '/forgot-password',
   isValidate.userValidationEmail,
   tryCatch(userController.forgetPasswordUser.bind(userController))
 );
 
 router.post(
+  '/change-password',
+  isValidate.userValidation,
+  tryCatch(userController.changePasswordUser.bind(userController))
+);
+
+router.post(
   '/verify/:verificationToken',
   isValidate.userValidationPassword,
-  tryCatch(userController.recoveryPassword.bind(userController))
+  tryCatch(userController.verificationPassword.bind(userController))
+);
+
+router.get(
+  '/verify-register/:verificationToken',
+  tryCatch(userController.verificationToken.bind(userController))
 );
 
 export default router;
