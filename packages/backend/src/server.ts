@@ -1,11 +1,14 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+
+var cors = require('cors');
 import 'dotenv/config';
 
 import AppRouter from './routes';
 import connectDB from './config/database';
 
 const app = express();
+app.use(cors());
 const router = new AppRouter(app);
 // Connect to MongoDB
 connectDB();

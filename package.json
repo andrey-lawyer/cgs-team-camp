@@ -24,5 +24,14 @@
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@mui/material": "^5.13.5",
+    "dotenv": "^16.3.1",
+    "formik": "^2.4.2",
+    "react-items-carousel": "^2.8.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.13.0",
+    "yup": "^1.2.0"
+  }
 }
