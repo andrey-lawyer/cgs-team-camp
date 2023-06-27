@@ -1,5 +1,4 @@
 import { getConnection } from 'typeorm';
-import jwt from 'jsonwebtoken';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { v4 as uuidv4 } from 'uuid';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -45,13 +44,10 @@ export default class UserService {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    await userRepository.update(
+    const data = await userRepository.update(
       { verification: verificationToken },
       { ...user, password: hashedPassword }
     );
-    const updateUser = { email: user.email, id: user.id };
-    const token = jwt.sign({ updateUser }, process.env.JWT_SECRET);
-
-    return token;
+    return data;
   };
 }

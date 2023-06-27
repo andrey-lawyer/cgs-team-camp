@@ -35,9 +35,8 @@ export class UserController {
   recoveryPassword = async (req: Request, res: Response) => {
     const { verificationToken } = req.params;
     const { password } = req.body;
-    const token = await this.userService.newPassword(verificationToken, password);
-
-    return res.json({ message: 'password updated successfully', token });
+    await this.userService.newPassword(verificationToken, password);
+    return res.json({ message: 'password updated successfully' });
   };
 
   logoutUser(req: Request, res: Response) {
