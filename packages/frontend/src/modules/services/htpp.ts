@@ -1,6 +1,7 @@
+import 'dotenv/config';
 import axios from 'axios'; // It could be any fetching services, such as default fetch, call api, xhr, etc.
 
-const BASE_URL = ' http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export class HttpService {
   baseUrl: string;
