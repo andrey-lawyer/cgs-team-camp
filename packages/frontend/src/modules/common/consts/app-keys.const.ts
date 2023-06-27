@@ -11,7 +11,9 @@ export const QUERY_KEYS = {
   EXAMPLE: 'EXAMPLE',
   TOKEN: 'TOKEN',
   STATISTIC: 'statistic',
-  TRENDING: 'trending'
+  TRENDING: 'trending',
+  TODOS: 'todos',
+  TODOID: 'todoId'
 };
 
 // Backend Routes
@@ -26,6 +28,9 @@ export const BACKEND_KEYS = {
 
 export const ROUTER_KEYS = {
   ROOT: '/',
-  HOME: 'home',
-  AUTHORIZED: 'authorized'
+  HOME: '/home',
+  AUTHORIZED: '/authorized',
+  TODOS: '/todos',
+  TODOID: '/todos/:todosId',
+  NOROUTE: '*'
 };

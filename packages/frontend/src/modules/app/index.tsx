@@ -1,4 +1,5 @@
 import React from 'react';
+import 'dotenv/config';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from 'styled-components';
@@ -7,8 +8,9 @@ import { MainRouter } from '../navigation';
 import * as theme from '../theme';
 import * as Styled from './app.styled';
 import '../../style.css';
+import { ModalState } from '../common/components/modal-context';
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       keepPreviousData: true,
@@ -20,14 +22,17 @@ const queryClient = new QueryClient({
   }
 });
 
-const AppContainer = () => (
-  <ThemeProvider theme={theme}>
-    <Styled.GlobalStyles />
-    <QueryClientProvider client={queryClient}>
-      <MainRouter />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </ThemeProvider>
-);
-
+const AppContainer = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Styled.GlobalStyles />
+      <QueryClientProvider client={queryClient}>
+        <ModalState>
+          <MainRouter />
+        </ModalState>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
+};
 export default AppContainer;
