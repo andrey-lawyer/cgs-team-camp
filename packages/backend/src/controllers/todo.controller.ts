@@ -23,7 +23,7 @@ export class TodoController {
     if (user) {
       const data = await this.todoService.addTodo(newTodo, user);
       res.status(201).json({ data, status: 'success' });
-    }
+    } else res.status(403).json({ status: 'you do not have rights to this operation' });
   }
 
   async deleteTodoId(req: IGetUserAuthInfoRequest, res: Response) {
