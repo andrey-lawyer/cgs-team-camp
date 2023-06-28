@@ -1,7 +1,7 @@
-import 'dotenv/config';
 import axios from 'axios'; // It could be any fetching services, such as default fetch, call api, xhr, etc.
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL_BACK = ' http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_BASE_URL || BASE_URL_BACK;
 
 export class HttpService {
   baseUrl: string;
@@ -54,7 +54,6 @@ export class HttpService {
         ...this.populateTokenToHeaderConfig()
       };
     }
-    console.log(config.data);
     return this.fetchingService.post(
       this.getFullApiUrl(config.url),
       config.data,

@@ -11,6 +11,7 @@ export const MainRouter = () => (
     <Routes>
       <Route element={<Layout />} path={APP_KEYS.ROUTER_KEYS.ROOT}>
         <Route index element={<HomePageContainer />} />
+
         <Route element={<TodosContainer />} path={APP_KEYS.ROUTER_KEYS.TODOS} />
         <Route element={<TodoIdContainer />} path={APP_KEYS.ROUTER_KEYS.TODOID} />
       </Route>
