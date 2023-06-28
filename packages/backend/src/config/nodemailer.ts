@@ -2,11 +2,11 @@
 import nodemailer from 'nodemailer';
 
 const config = {
-  host: 'smtp.meta.ua',
+  host: process.env.HOST,
   port: 465,
   secure: true,
   auth: {
-    user: 'real_vostok@meta.ua',
+    user: process.env.EMAIL,
     pass: process.env.PASSWORD
   }
 };

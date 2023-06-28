@@ -21,6 +21,9 @@ export default class Todo extends BaseEntity {
   @Column()
   access: IsAccess;
 
+  @Column()
+  idUser: string;
+
   @ManyToOne(() => User, (user) => user.todos)
   user: User;
 }

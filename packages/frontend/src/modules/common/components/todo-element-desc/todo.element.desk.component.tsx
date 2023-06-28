@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { ITodoProps } from '../../types/props.types';
 import { APP_KEYS } from '../../consts';
 import { useMutationDelete } from '../../../hooks/use.mutation.delete';
 import { ButtonDel, ButtonView, Cell } from './todo.element.desk.styled';
+import { IsLoggedInContext } from '../isloggedin-context';
 export const TodoElementDesk: FC<ITodoProps> = ({
   todo: { id, title, description, complete, access }
 }) => {
+  const { isLoggedIn } = useContext(IsLoggedInContext);
   const {
     mutation: { mutate }
   } = useMutationDelete();
@@ -18,7 +20,7 @@ export const TodoElementDesk: FC<ITodoProps> = ({
       <td>{description}</td>
       <Cell>
         <ButtonView to={`${APP_KEYS.ROUTER_KEYS.TODOS}/${id}`}>view</ButtonView>
-        <ButtonDel onClick={() => onDelete(id)}>delete</ButtonDel>
+        {isLoggedIn && <ButtonDel onClick={() => onDelete(id)}>delete</ButtonDel>}
       </Cell>
     </>
   );

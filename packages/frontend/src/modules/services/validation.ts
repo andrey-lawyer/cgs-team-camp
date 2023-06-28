@@ -13,3 +13,31 @@ export let schemaAdd = yup.object().shape({
     .max(100, 'description is too long')
     .required()
 });
+
+export let schemaUserRegistration = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup
+    .string()
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/, 'Password invalid')
+    .required(),
+  passwordConfirmation: yup.string().oneOf([yup.ref('password')], 'Passwords must match')
+});
+
+export let schemaUserLogin = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup
+    .string()
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/, 'Password invalid')
+    .required()
+});
+
+export let schemaOnlyEmail = yup.object().shape({
+  email: yup.string().email().required()
+});
+
+export let schemaOnlyPassword = yup.object().shape({
+  password: yup
+    .string()
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/, 'Password invalid')
+    .required()
+});

@@ -10,11 +10,15 @@ import { onSubmitUpdate } from '../../../services/submit-update';
 import { onSubmitAdd } from '../../../services/submit-add';
 import { useMutationUpdate } from '../../../hooks/use.mutation.update';
 import { useMutationAdd } from '../../../hooks/use.mutation.add';
+import { Loader } from '../loader';
+import { notify } from '../../../services/toast';
 
 export const ModalForm = ({ onClose, todo, type }: IModalProps) => {
   const {
-    mutation: { mutate }
+    mutation: { mutate, isLoading, isError }
   } = type === 'update' ? useMutationUpdate() : useMutationAdd();
+
+  if (isError) notify();
 
   const nameButton = type === 'update' ? 'Update' : 'Add';
   const completed = todo?.complete ? 'done' : 'in progress';
@@ -36,6 +40,7 @@ export const ModalForm = ({ onClose, todo, type }: IModalProps) => {
   });
   return (
     <ModalWindow>
+      {isLoading && <Loader />}
       <form onSubmit={formik.handleSubmit}>
         <Box border="1px solid" mb="5px" p="5px">
           <TextField

@@ -8,7 +8,7 @@ export default class IsValidate {
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ['com', 'net'] }
+          tlds: { allow: ['com', 'net', 'ua'] }
         })
         .pattern(
           // eslint-disable-next-line no-useless-escape
@@ -28,7 +28,7 @@ export default class IsValidate {
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ['com', 'net'] }
+          tlds: { allow: ['com', 'net', 'ua'] }
         })
         .pattern(
           // eslint-disable-next-line no-useless-escape
