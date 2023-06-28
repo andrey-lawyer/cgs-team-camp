@@ -8,7 +8,7 @@ import { transporter } from '../config/nodemailer';
 import { ErrorUnauthorized } from '../helpers/errors';
 
 export default class UserService {
-  BASE_URL_FRONT = process.env.FRONT;
+  BASE_URL_FRONT = process.env.BASE_URL_FRONT;
 
   async sendEmailForgotPassword(email: string) {
     const newConnection = await getConnection();

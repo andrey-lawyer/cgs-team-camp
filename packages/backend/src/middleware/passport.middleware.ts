@@ -18,7 +18,7 @@ import { transporter } from '../config/nodemailer';
 export const myPassport = new passport.Passport();
 
 const { Strategy, ExtractJwt } = passportJWT;
-const BASE_URL_FRONT = process.env.FRONT;
+const BASE_URL_BACK = process.env.BASE_URL_BACK;
 myPassport.use(
   'signup',
   new LocalStrategy(
@@ -41,7 +41,7 @@ myPassport.use(
           from: 'real_vostok@meta.ua',
           to: email,
           subject: 'password recovery',
-          html: `<a target="_blank" href="${BASE_URL_FRONT}/new-password/${verification}">Click link</a>`
+           html: `<a target="_blank" href="${BASE_URL_BACK}/user/verify-register/${verification}">Click link</a>`
         };
         const send = await transporter.sendMail(emailOptions);
 
