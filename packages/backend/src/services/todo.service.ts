@@ -1,4 +1,4 @@
-import { getConnection } from 'typeorm';
+import { In, getConnection } from 'typeorm';
 import Todo from '../entities/Todo';
 
 import { ITodo } from '../types/todos.type';
@@ -8,10 +8,41 @@ export default class TodoService {
   async findAllTodos(req: IGetUserAuthInfoRequest) {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
+    const { search, status, access } = req.query;
+
+    const statusBoolean = status === 'done' ? true : false;
+
+    const newAccess = access ? [access] : ['public', 'private'];
+    const newStatus = status ? [statusBoolean] : [true, false];
+
     if (!req.user) {
-      return await todoRepository.find({ where: { access: 'public' } });
+      if (search) {
+        return await todoRepository.findBy({
+          access: 'public',
+          complete: In(newStatus),
+          title: In([search])
+        });
+      }
+      return await todoRepository.findBy({
+        access: 'public',
+        complete: In(newStatus)
+      });
     }
-    const data = await todoRepository.find({});
+
+    let data: Todo[];
+
+    if (search) {
+      data = await todoRepository.findBy({
+        access: In(newAccess),
+        complete: In(newStatus),
+        title: In([search])
+      });
+    } else {
+      data = await todoRepository.findBy({
+        access: In(newAccess),
+        complete: In(newStatus)
+      });
+    }
 
     if (data.length > 0) {
       const newData = data.filter((el: any) => {

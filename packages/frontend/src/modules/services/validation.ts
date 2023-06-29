@@ -33,3 +33,7 @@ export let schemaOnlyEmail = yup.object().shape({
 export let schemaOnlyPassword = yup.object().shape({
   password: yup.string().matches(regexPassword, 'Password invalid').required()
 });
+
+export let schemaSearch = yup.object().shape({
+  title: yup.string().min(2, 'Title is too short').max(10, 'Title is too long')
+});

@@ -7,7 +7,7 @@ export const useGetAllTodos = () => {
   const query: iQuery = useQuery({
     queryKey: [APP_KEYS.QUERY_KEYS.TODOS],
     queryFn: async () => {
-      const response = await apiTodos.getAllTodos();
+      const response = await apiTodos.getAllTodos(APP_KEYS.QUERY_KEYS.TODOS);
       return response;
     }
   });
