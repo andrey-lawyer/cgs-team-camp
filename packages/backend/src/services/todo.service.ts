@@ -8,10 +8,21 @@ export default class TodoService {
   async findAllTodos(req: IGetUserAuthInfoRequest) {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
+    if (!req.user) {
+      return await todoRepository.find({ where: { access: 'public' } });
+    }
+    const data = await todoRepository.find({});
 
-    const data = req.user
-      ? await todoRepository.find({})
-      : await todoRepository.find({ where: { access: 'public' } });
+    if (data.length > 0) {
+      const newData = data.filter((el: any) => {
+        console.log(el);
+        if (el.idUser == req.user.id) {
+          return el;
+        }
+        if (el.access === 'public') return el;
+      });
+      return newData;
+    }
     return data;
   }
 
@@ -22,10 +33,12 @@ export default class TodoService {
     return oneTodo;
   }
 
-  async addTodo(newTodo: ITodo, user: IUser) {
+  async addTodo(todo: ITodo, user: IUser) {
     const newConnection = await getConnection();
     const todoRepository = newConnection.getRepository(Todo);
-    const data = await todoRepository.save({ ...newTodo, user });
+    const newTodo = { ...todo, idUser: user.id };
+
+    const data = await todoRepository.save(newTodo);
     return data;
   }
 
@@ -34,9 +47,7 @@ export default class TodoService {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
     const findUser = await todoRepository.findOneBy({
-      user: {
-        id: user.id
-      }
+      idUser: user.id
     });
     if (!findUser) throw new Error('you do not have rights to this operation');
     const removeTodo = await todoRepository.delete({ id: todoId });
@@ -48,9 +59,7 @@ export default class TodoService {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
     const findUser = await todoRepository.findOneBy({
-      user: {
-        id: user.id
-      }
+      idUser: user.id
     });
     if (!findUser) throw new Error('you do not have rights to this operation');
     const updateTodo = await todoRepository.update({ id: todoId }, { ...todo });

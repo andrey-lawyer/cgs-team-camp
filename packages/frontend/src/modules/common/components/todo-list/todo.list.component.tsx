@@ -12,17 +12,23 @@ import { TodoElementDesk } from '../todo-element-desc';
 import { Table, List, Item } from './todo.list.styled';
 import { useGetAllTodos } from '../../../hooks/use.query.all';
 import { TodoElementMob } from '../todo-element-mob';
+import { IsLoggedInContext } from '../isloggedin-context';
+import { Loader } from '../loader';
+import { notify } from '../../../services/toast';
 
 export const TodoList = () => {
+  const { isLoggedIn } = useContext(IsLoggedInContext);
   const { isMobile, isTablet, isDesk } = useScreen();
   const { modal, open, close } = useContext(ModalContext);
 
   const {
     query: { isLoading, error, data }
   } = useGetAllTodos();
+  if (error) notify();
 
   return (
     <>
+      {isLoading && <Loader />}
       {data && (
         <>
           {isMobile && (
@@ -65,12 +71,13 @@ export const TodoList = () => {
               </tbody>
             </Table>
           )}
-          <Box textAlign={'center'} mt="20px">
-            <Button onClick={open} variant="contained" color="primary">
-              Add
-            </Button>
-          </Box>
-
+          {isLoggedIn && (
+            <Box textAlign={'center'} mt="20px">
+              <Button onClick={open} variant="contained" color="primary">
+                Add
+              </Button>
+            </Box>
+          )}
           {modal && (
             <Portal onClose={close}>
               <ModalForm onClose={close} type="add" />

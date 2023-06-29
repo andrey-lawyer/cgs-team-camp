@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { regexEmail, regexPassword } from '../const/regex.variables';
 
 const Joi = require('joi');
 
@@ -8,17 +9,11 @@ export default class IsValidate {
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ['com', 'net'] }
+          tlds: { allow: ['com', 'net', 'ua'] }
         })
-        .pattern(
-          // eslint-disable-next-line no-useless-escape
-          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-        )
+        .pattern(regexEmail)
         .required(),
-      password: Joi.string()
-        // eslint-disable-next-line no-useless-escape
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
-        .required()
+      password: Joi.string().pattern(regexPassword).required()
     });
     await this.validateRequest(schema, req, res, next);
   };
@@ -28,22 +23,16 @@ export default class IsValidate {
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ['com', 'net'] }
+          tlds: { allow: ['com', 'net', 'ua'] }
         })
-        .pattern(
-          // eslint-disable-next-line no-useless-escape
-          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-        )
+        .pattern(regexEmail)
     });
     await this.validateRequest(schema, req, res, next);
   };
 
   userValidationPassword = async (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
-      password: Joi.string()
-        // eslint-disable-next-line no-useless-escape
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
-        .required()
+      password: Joi.string().pattern(regexPassword).required()
     });
     await this.validateRequest(schema, req, res, next);
   };

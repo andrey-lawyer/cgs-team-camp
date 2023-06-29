@@ -13,6 +13,7 @@ export const QUERY_KEYS = {
   STATISTIC: 'statistic',
   TRENDING: 'trending',
   TODOS: 'todos',
+  USER: 'user',
   TODOID: 'todoId'
 };
 
@@ -32,5 +33,10 @@ export const ROUTER_KEYS = {
   AUTHORIZED: '/authorized',
   TODOS: '/todos',
   TODOID: '/todos/:todosId',
+  REGISTER: '/register',
+  LOGIN: '/login',
+  FORGET_PASSWORD: '/forget-password',
+  CHANGE_PASSWORD: '/change-password',
+  VERIFICATION: '/new-password/:verificationToken',
   NOROUTE: '*'
 };

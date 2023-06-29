@@ -8,6 +8,7 @@ import * as theme from '../theme';
 import * as Styled from './app.styled';
 import '../../style.css';
 import { ModalState } from '../common/components/modal-context';
+import { IsLoggedInState } from '../common/components/isloggedin-context';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,9 @@ const AppContainer = () => {
       <Styled.GlobalStyles />
       <QueryClientProvider client={queryClient}>
         <ModalState>
-          <MainRouter />
+          <IsLoggedInState>
+            <MainRouter />
+          </IsLoggedInState>
         </ModalState>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

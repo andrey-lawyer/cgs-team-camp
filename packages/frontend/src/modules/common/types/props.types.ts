@@ -21,3 +21,9 @@ export interface IModalProps {
   onClose: () => void;
   type: string;
 }
+
+export interface IIsLoggedInContext {
+  isLoggedIn: boolean;
+  loggedIn: () => void;
+  notLoggedIn: () => void;
+}

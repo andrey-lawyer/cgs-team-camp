@@ -35,3 +35,13 @@ export const NavItem = styled(NavLink)`
     color: #3f51b5;
   }
 `;
+
+export const LogOut = styled.div`
+  padding: ${(props) => props.theme.SPACES.spacing(2)};
+  border-radius: ${(props) => props.theme.SPACES.spacing(1)};
+  text-decoration: none;
+  display: inline-block;
+  margin-left: ${(props) => props.theme.SPACES.spacing(4)};
+  margin-top: ${(props) => props.theme.SPACES.spacing(2)};
+  color: white;
+`;
