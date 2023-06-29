@@ -8,6 +8,11 @@ import { APP_KEYS } from '../common/consts';
 import { notify } from '../services/toast';
 import { Loader } from '../common/components/loader';
 
+const initialValue = {
+  email: '',
+  password: ''
+};
+
 const ChangePasswordContainer = () => {
   const navigate = useNavigate();
   const {
@@ -19,10 +24,7 @@ const ChangePasswordContainer = () => {
   }
   if (isError) notify();
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: ''
-    },
+    initialValues: initialValue,
     validationSchema: schemaUserLogin,
     onSubmit: (values) => {
       mutate(values);
