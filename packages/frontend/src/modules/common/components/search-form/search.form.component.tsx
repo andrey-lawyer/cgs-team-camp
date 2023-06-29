@@ -16,7 +16,7 @@ const initialValue = {
   complete: ''
 };
 
-export const SearchForm: FC<ISearchProps> = ({ setIsAllTodo, setClickSearch, setQueryString }) => {
+export const SearchForm: FC<ISearchProps> = ({ setQueryString }) => {
   const {
     mutation: { mutate, isLoading, isError }
   } = useMutationUpdate();
@@ -28,8 +28,6 @@ export const SearchForm: FC<ISearchProps> = ({ setIsAllTodo, setClickSearch, set
     validationSchema: schemaSearch,
     onSubmit: (values) => {
       const queryString = `${APP_KEYS.QUERY_KEYS.TODOS}?search=${values.title}&status=${values.complete}&access=${values.access}`;
-      setIsAllTodo(false);
-      setClickSearch((prevState) => !prevState);
       setQueryString(queryString);
     }
   });

@@ -23,47 +23,25 @@ export const TodoList = () => {
   const { isMobile, isTablet, isDesk } = useScreen();
   const { modal, open, close } = useContext(ModalContext);
 
-  const [isAllTodo, setIsAllTodo] = useState(true);
-  const [clickSearch, setClickSearch] = useState(false);
-  const [dataSearchUser, setDataSearchUser] = useState([]);
-
   const [queryString, setQueryString] = useState('');
-
-  useEffect(() => {
-    const fetchSearch = async () => {
-      try {
-        const response = await apiTodos.getAllTodos(queryString);
-        setDataSearchUser(response.data);
-      } catch (err) {
-        notify();
-      }
-    };
-    if (queryString) fetchSearch();
-  }, [clickSearch, queryString]);
 
   const {
     query: { isLoading, error, data }
-  } = useGetAllTodos();
+  } = queryString ? useGetAllTodos(queryString) : useGetAllTodos();
   if (!data) return <div>Loading...</div>;
 
   if (error) notify();
-
-  const showTodo = isAllTodo ? data.data : dataSearchUser;
+  const showTodo = data.data;
 
   return (
     <>
       {isLoading && <Loader />}
       {showTodo && (
         <>
-          <SearchForm
-            setIsAllTodo={setIsAllTodo}
-            setClickSearch={setClickSearch}
-            setQueryString={setQueryString}
-          />
+          <SearchForm setQueryString={setQueryString} />
           <Box textAlign={'center'} mt="20px">
             <Button
               onClick={() => {
-                setIsAllTodo(true);
                 setQueryString('');
               }}
               variant="contained"

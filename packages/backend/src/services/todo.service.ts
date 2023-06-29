@@ -10,6 +10,10 @@ export default class TodoService {
     const todoRepository = newConnection.getRepository(Todo);
     const { search, status, access } = req.query;
 
+    const { page = '1', limit = '10' } = req.query;
+    const skip: number = (Number(page) - 1) * Number(limit);
+    const take = Number(limit);
+
     const statusBoolean = status === 'done' ? true : false;
 
     const newAccess = access ? [access] : ['public', 'private'];
@@ -17,30 +21,47 @@ export default class TodoService {
 
     if (!req.user) {
       if (search) {
-        return await todoRepository.findBy({
-          access: 'public',
-          complete: In(newStatus),
-          title: In([search])
+        return await todoRepository.find({
+          skip: skip,
+          take: take,
+          where: {
+            access: 'public',
+
+            complete: In(newStatus),
+            title: In([search])
+          }
         });
       }
-      return await todoRepository.findBy({
-        access: 'public',
-        complete: In(newStatus)
+      return await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: 'public',
+          complete: In(newStatus)
+        }
       });
     }
 
     let data: Todo[];
 
     if (search) {
-      data = await todoRepository.findBy({
-        access: In(newAccess),
-        complete: In(newStatus),
-        title: In([search])
+      data = await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: In(newAccess),
+          complete: In(newStatus),
+          title: In([search])
+        }
       });
     } else {
-      data = await todoRepository.findBy({
-        access: In(newAccess),
-        complete: In(newStatus)
+      data = await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: In(newAccess),
+          complete: In(newStatus)
+        }
       });
     }
 
@@ -54,6 +75,7 @@ export default class TodoService {
       });
       return newData;
     }
+    console.log(data);
     return data;
   }
 
