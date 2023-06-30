@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -15,26 +15,44 @@ import { TodoElementMob } from '../todo-element-mob';
 import { IsLoggedInContext } from '../isloggedin-context';
 import { Loader } from '../loader';
 import { notify } from '../../../services/toast';
+import { SearchForm } from '../search-form';
 
 export const TodoList = () => {
   const { isLoggedIn } = useContext(IsLoggedInContext);
   const { isMobile, isTablet, isDesk } = useScreen();
   const { modal, open, close } = useContext(ModalContext);
 
+  const [queryString, setQueryString] = useState('');
+
   const {
     query: { isLoading, error, data }
-  } = useGetAllTodos();
+  } = queryString ? useGetAllTodos(queryString) : useGetAllTodos();
+  if (!data) return <div>Loading...</div>;
+
   if (error) notify();
+  const showTodo = data.data;
 
   return (
     <>
       {isLoading && <Loader />}
-      {data && (
+      {showTodo && (
         <>
+          <SearchForm setQueryString={setQueryString} />
+          <Box textAlign={'center'} mt="20px">
+            <Button
+              onClick={() => {
+                setQueryString('');
+              }}
+              variant="contained"
+              color="primary"
+            >
+              Show all
+            </Button>
+          </Box>
           {isMobile && (
             <Box mt="20px">
               <List>
-                {data.data.map((todo) => (
+                {showTodo.map((todo) => (
                   <Item key={todo.id}>
                     <TodoElementMob todo={todo} />
                   </Item>
@@ -45,7 +63,7 @@ export const TodoList = () => {
           {isTablet && (
             <Box bgcolor="#00bfff" pt={'20px'} mt="20px">
               <Carousel showArrows={true}>
-                {data.data.map((todo) => (
+                {showTodo.map((todo) => (
                   <div key={todo.id}>
                     <TodoElementTab todo={todo} />
                   </div>
@@ -63,7 +81,7 @@ export const TodoList = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.data.map((todo) => (
+                {showTodo.map((todo) => (
                   <tr key={todo.id}>
                     <TodoElementDesk todo={todo} />
                   </tr>

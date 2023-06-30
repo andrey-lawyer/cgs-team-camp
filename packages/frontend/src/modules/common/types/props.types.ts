@@ -27,3 +27,7 @@ export interface IIsLoggedInContext {
   loggedIn: () => void;
   notLoggedIn: () => void;
 }
+
+export interface ISearchProps {
+  setQueryString: (state: string) => void;
+}

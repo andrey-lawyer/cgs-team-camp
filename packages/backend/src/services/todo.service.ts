@@ -1,4 +1,4 @@
-import { getConnection } from 'typeorm';
+import { In, getConnection } from 'typeorm';
 import Todo from '../entities/Todo';
 
 import { ITodo } from '../types/todos.type';
@@ -8,10 +8,62 @@ export default class TodoService {
   async findAllTodos(req: IGetUserAuthInfoRequest) {
     const newConnection = getConnection();
     const todoRepository = newConnection.getRepository(Todo);
+    const { search, status, access } = req.query;
+
+    const { page = '1', limit = '10' } = req.query;
+    const skip: number = (Number(page) - 1) * Number(limit);
+    const take = Number(limit);
+
+    const statusBoolean = status === 'done' ? true : false;
+
+    const newAccess = access ? [access] : ['public', 'private'];
+    const newStatus = status ? [statusBoolean] : [true, false];
+
     if (!req.user) {
-      return await todoRepository.find({ where: { access: 'public' } });
+      if (search) {
+        return await todoRepository.find({
+          skip: skip,
+          take: take,
+          where: {
+            access: 'public',
+
+            complete: In(newStatus),
+            title: In([search])
+          }
+        });
+      }
+      return await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: 'public',
+          complete: In(newStatus)
+        }
+      });
     }
-    const data = await todoRepository.find({});
+
+    let data: Todo[];
+
+    if (search) {
+      data = await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: In(newAccess),
+          complete: In(newStatus),
+          title: In([search])
+        }
+      });
+    } else {
+      data = await todoRepository.find({
+        skip: skip,
+        take: take,
+        where: {
+          access: In(newAccess),
+          complete: In(newStatus)
+        }
+      });
+    }
 
     if (data.length > 0) {
       const newData = data.filter((el: any) => {
@@ -23,6 +75,7 @@ export default class TodoService {
       });
       return newData;
     }
+    console.log(data);
     return data;
   }
 
