@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { regexPassword } from '../regex-variables/regex.variables';
+import { regexPassword } from '../variables/regex.variables';
 
 export let schemaUpdate = yup.object().shape({
   title: yup.string().min(2, 'Title is too short').max(10, 'Title is too long'),

@@ -4,42 +4,30 @@ import { useFormik } from 'formik';
 import { schemaSearch } from '../../../services/validation';
 import TextField from '@material-ui/core/TextField';
 import { Box, Typography } from '@material-ui/core';
-import { useMutationUpdate } from '../../../hooks/use.mutation.update';
-import { Loader } from '../loader';
-import { notify } from '../../../services/toast';
 import { ISearchProps } from '../../types/props.types';
 import { APP_KEYS } from '../../consts';
-
-const initialValue = {
-  title: '',
-  access: '',
-  complete: ''
-};
+import { initialValueSearch } from '../../../variables/initial.variables';
 
 export const SearchForm: FC<ISearchProps> = ({ setQueryString }) => {
-  const {
-    mutation: { mutate, isLoading, isError }
-  } = useMutationUpdate();
-
-  if (isError) notify();
-
   const formik = useFormik({
-    initialValues: initialValue,
+    initialValues: initialValueSearch,
     validationSchema: schemaSearch,
     onSubmit: (values) => {
       const queryString = `${APP_KEYS.QUERY_KEYS.TODOS}?search=${values.title}&status=${values.complete}&access=${values.access}`;
       setQueryString(queryString);
+      values.complete = '';
+      values.access = '';
+      values.title = '';
     }
   });
   return (
     <>
-      {isLoading && <Loader />}
       <Box border="1px solid blue" p="10px" mt="10px" textAlign={'center'}>
         <Typography variant="inherit" component="h2">
           Todo search form
         </Typography>
         <form onSubmit={formik.handleSubmit}>
-          <Box border="1px solid" mb="10px">
+          <Box border="1px solid" mb="10px" p="5px">
             <TextField
               fullWidth
               id="title"
@@ -58,7 +46,7 @@ export const SearchForm: FC<ISearchProps> = ({ setQueryString }) => {
               name="complete"
               value={formik.values.complete}
             >
-              <Box border="1px solid" mb="5px" p="5px" textAlign={'center'}>
+              <Box border="1px solid" mb="5px" p="5px" pl="15px" textAlign={'center'}>
                 <Typography variant="inherit" component="p">
                   Complete
                 </Typography>
@@ -73,7 +61,7 @@ export const SearchForm: FC<ISearchProps> = ({ setQueryString }) => {
             </RadioGroup>
 
             <RadioGroup onChange={formik.handleChange} name="access" value={formik.values.access}>
-              <Box border="1px solid" mb="5px" p="5px" textAlign={'center'}>
+              <Box border="1px solid" mb="5px" p="5px" pl="15px" textAlign={'center'}>
                 <Typography variant="inherit" component="p">
                   Access
                 </Typography>

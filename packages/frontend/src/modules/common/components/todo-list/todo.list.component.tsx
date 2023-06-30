@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -16,7 +16,6 @@ import { IsLoggedInContext } from '../isloggedin-context';
 import { Loader } from '../loader';
 import { notify } from '../../../services/toast';
 import { SearchForm } from '../search-form';
-import { apiTodos } from '../../../services/todo.api';
 
 export const TodoList = () => {
   const { isLoggedIn } = useContext(IsLoggedInContext);
