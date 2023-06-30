@@ -17,10 +17,10 @@ export const TodoElementTab: FC<ITodoProps> = ({
     mutate(id);
   };
   return (
-    <Box pb="40px">
+    <Box pb="40px" minWidth={300} textAlign={'center'} p="10px">
       <h2> Title: {title}</h2>
       <p>Description: {description}</p>
-      <Box display={'flex'} justifyContent={'space-around'}>
+      <Box mt={'10px'} mb="10px">
         <ButtonView to={`${APP_KEYS.ROUTER_KEYS.TODOS}/${id}`}>view</ButtonView>
         {isLoggedIn && <ButtonDel onClick={() => onDelete(id)}>delete</ButtonDel>}
       </Box>

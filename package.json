@@ -29,6 +29,9 @@
     "@types/passport": "^1.0.12",
     "@types/passport-anonymous": "^1.0.3",
     "bcrypt": "^5.1.0",
+    "debounce": "^1.2.1",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
     "passport-anonymous": "^1.0.1"
   }
 }
